@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#111318" />
+    <title>BOX WOD TIMER</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./">BOX <span>WOD</span> TIMER</a>
+        <div class="top-actions">
+          <button class="ghost" id="soundButton" type="button" aria-pressed="true">🔊 SOUND ON</button>
+          <button class="ghost" id="themeButton" type="button">☾</button>
+        </div>
+      </header>
+
+      <section class="setup-view" id="setupView">
+        <div class="intro">
+          <p class="eyebrow">TRAIN. REST. REPEAT.</p>
+          <h1>오늘의 WOD를<br />바로 시작하세요.</h1>
+          <p>박스 전광판에 맞춘 큰 화면, 명확한 비프음, 빠른 세팅.</p>
+        </div>
+        <div class="setup-grid">
+          <section class="panel modes-panel">
+            <div class="section-title"><span>01</span><h2>타이머 모드</h2></div>
+            <div class="mode-grid" id="modeGrid">
+              <button class="mode-card active" data-mode="amrap"><b>AMRAP</b><small>시간 내 최대 라운드</small></button>
+              <button class="mode-card" data-mode="emom"><b>EMOM</b><small>매 분 시작</small></button>
+              <button class="mode-card" data-mode="tabata"><b>TABATA</b><small>운동 · 휴식 반복</small></button>
+              <button class="mode-card" data-mode="interval"><b>INTERVAL</b><small>자유 인터벌</small></button>
+              <button class="mode-card" data-mode="countdown"><b>COUNTDOWN</b><small>단일 카운트다운</small></button>
+              <button class="mode-card" data-mode="stopwatch"><b>STOPWATCH</b><small>경과 시간 측정</small></button>
+              <button class="mode-card" data-mode="fortime"><b>FOR TIME</b><small>완료 기록 측정</small></button>
+              <button class="mode-card" data-mode="fgb"><b>FIGHT GONE BAD</b><small>5 스테이션</small></button>
+              <button class="mode-card" data-mode="deathby"><b>DEATH BY</b><small>매 분 반복 증가</small></button>
+            </div>
+          </section>
+
+          <section class="panel settings-panel">
+            <div class="section-title"><span>02</span><h2>세부 설정</h2></div>
+            <form id="timerForm">
+              <label class="wide">WOD 이름<input id="wodName" maxlength="32" value="TODAY'S WOD" /></label>
+              <div class="fields" id="dynamicFields"></div>
+              <details>
+                <summary>고급 옵션</summary>
+                <div class="fields advanced">
+                  <label>준비 시간 (초)<input id="prepSeconds" type="number" min="0" max="60" value="10" /></label>
+                  <label class="toggle-label">마지막 3초 비프음<input id="countdownBeeps" type="checkbox" checked /></label>
+                </div>
+              </details>
+              <div class="form-actions">
+                <button class="secondary" id="savePreset" type="button">프리셋 저장</button>
+                <button class="primary" type="submit">타이머 시작 <span>→</span></button>
+              </div>
+            </form>
+          </section>
+        </div>
+        <section class="presets" id="presetsSection" hidden>
+          <div class="section-title"><span>03</span><h2>저장된 프리셋</h2></div>
+          <div class="preset-list" id="presetList"></div>
+        </section>
+      </section>
+
+      <section class="timer-view hidden" id="timerView" aria-live="polite">
+        <div class="timer-head"><span id="roundLabel">ROUND —</span><span id="modeLabel">AMRAP</span></div>
+        <div class="timer-core">
+          <p id="timerState">GET READY</p>
+          <output id="clock">00:10</output>
+          <h1 id="exerciseLabel">TODAY'S WOD</h1>
+          <p id="nextLabel">NEXT: WORK</p>
+        </div>
+        <div class="timer-controls">
+          <button id="pauseButton" class="control-main" type="button">PAUSE <kbd>Space</kbd></button>
+          <button id="backButton" type="button">← BACK <kbd>B</kbd></button>
+          <button id="nextButton" type="button">NEXT → <kbd>N</kbd></button>
+          <button id="resetButton" type="button">RESET <kbd>R</kbd></button>
+          <button id="fullscreenButton" type="button">FULLSCREEN <kbd>F</kbd></button>
+          <button id="exitButton" type="button">EXIT <kbd>Esc</kbd></button>
+        </div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
