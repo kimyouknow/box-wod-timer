@@ -49,6 +49,18 @@
                 <div class="fields advanced">
                   <label>준비 시간 (초)<input id="prepSeconds" type="number" min="0" max="60" value="10" /></label>
                   <label class="toggle-label">마지막 3초 비프음<input id="countdownBeeps" type="checkbox" checked /></label>
+                  <label>큐 방식
+                    <select id="cueProfile">
+                      <option value="standard">표준 — 구간 전환 + 마지막 3초</option>
+                      <option value="minimal">미니멀 — 구간 전환만</option>
+                      <option value="intense">집중 — 구간 전환 + 마지막 10초</option>
+                    </select>
+                  </label>
+                  <label class="toggle-label">구간 음성 안내<input id="voiceCues" type="checkbox" /></label>
+                  <label class="capture-option wide toggle-label">촬영 모드 (카메라·마이크)<input id="captureMode" type="checkbox" /></label>
+                  <label class="capture-option" id="cameraFacingLabel" hidden>카메라
+                    <select id="cameraFacing"><option value="environment">후면 카메라</option><option value="user">전면 카메라</option></select>
+                  </label>
                 </div>
               </details>
               <div class="form-actions">
@@ -65,6 +77,9 @@
       </section>
 
       <section class="timer-view hidden" id="timerView" aria-live="polite">
+        <video id="cameraPreview" class="camera-preview" autoplay muted playsinline></video>
+        <div class="recording-badge" id="recordingBadge" hidden><i></i> REC</div>
+        <a id="downloadRecording" class="download-recording" hidden download="box-wod-recording.webm">영상 저장 ↓</a>
         <div class="timer-head"><span id="roundLabel">ROUND —</span><span id="modeLabel">AMRAP</span></div>
         <div class="timer-core">
           <p id="timerState">GET READY</p>
@@ -78,6 +93,7 @@
           <button id="nextButton" type="button">NEXT → <kbd>N</kbd></button>
           <button id="resetButton" type="button">RESET <kbd>R</kbd></button>
           <button id="fullscreenButton" type="button">FULLSCREEN <kbd>F</kbd></button>
+          <button id="recordButton" type="button" hidden>STOP REC</button>
           <button id="exitButton" type="button">EXIT <kbd>Esc</kbd></button>
         </div>
       </section>
