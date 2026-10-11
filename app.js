@@ -54,23 +54,25 @@ function ensureAudio() {
     try { capture.mic = audioContext.createMediaStreamSource(capture.stream); capture.mic.connect(capture.destination); } catch {}
   }
 }
-function beep(freq=880, duration=.09) {
+function beep(freq=1000, duration=.09, type='square') {
   if(!soundOn) return;
   try {
     ensureAudio();
     const o=audioContext.createOscillator(), g=audioContext.createGain();
-    o.frequency.value=freq; g.gain.value=.11; o.connect(g); g.connect(audioContext.destination);
+    o.type=type; o.frequency.value=freq; g.gain.setValueAtTime(.001,audioContext.currentTime); g.gain.exponentialRampToValueAtTime(.075,audioContext.currentTime+.008); o.connect(g); g.connect(audioContext.destination);
     if(capture.destination) g.connect(capture.destination);
-    o.start(); g.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration); o.stop(audioContext.currentTime+duration);
+    o.start(); g.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration); o.stop(audioContext.currentTime+duration+.01);
   } catch {}
 }
+function countdownBeep() { beep(1000,.075); }
+function transitionBeep() { beep(1440,.24); }
 function say(text) {
   if(!run.config?.voice || !('speechSynthesis' in window)) return;
   speechSynthesis.cancel(); const utterance=new SpeechSynthesisUtterance(text); utterance.lang='ko-KR'; utterance.rate=1.08; speechSynthesis.speak(utterance);
 }
 function announceSegment(s) {
   const spoken = s.type==='ready' ? '준비' : s.type==='rest' ? '휴식' : s.type==='work' ? '운동 시작' : s.label;
-  beep(s.type==='ready' ? 620 : s.type==='rest' ? 620 : 930, s.type==='ready' ? .12 : .18); say(spoken);
+  transitionBeep(); say(spoken);
 }
 function current() { return run.segments[run.index]; }
 function display() {
@@ -88,8 +90,8 @@ function tick(now) {
   if(s.type==='countup') { run.elapsed+=delta; run.startedAt=now; }
   else {
     const old=Math.ceil(run.remaining); run.remaining-=delta; run.startedAt=now; const second=Math.ceil(run.remaining);
-    if(run.config.beeps && run.remaining>0 && second!==old && shouldCountdownCue(second)) { beep(700,.07); if(run.config.voice && run.config.cueProfile==='intense' && second<=3) say(String(second)); }
-    if(run.remaining<=0) { beep(1050,.22); next(); return; }
+    if(run.config.beeps && run.remaining>0 && second!==old && shouldCountdownCue(second)) { countdownBeep(); if(run.config.voice && run.config.cueProfile==='intense' && second<=3) say(String(second)); }
+    if(run.remaining<=0) { next(); return; }
   }
   display(); run.raf=requestAnimationFrame(tick);
 }
